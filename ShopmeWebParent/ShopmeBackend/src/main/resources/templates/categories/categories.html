@@ -39,9 +39,14 @@
             <tr>
                 <th>ID</th>
                 <th>Category Image</th>
-                <th>Category Name</th>
+                <th>
+                    <a class="text-white" th:href="@{'/categories?sortDir=asc' +${reverseSortDir}}">Category Name</a>
+                    <span th:class="${reverseSortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
+                </th>
                 <th>Alias</th>
-                <th>Enabled</th>
+                <th>
+                    Enabled
+                </th>
                 <th></th>
             </tr>
             </thead>
@@ -54,17 +59,32 @@
                 <td th:text="${cat.name}"></td>
                 <td th:text="${cat.alias}"></td>
                 <td>
-                    <div th:replace="fragments :: category_status(${cat.enabled}, 'category', '/categories/' + ${cat.id})"></div>
+                    <div th:replace="fragments :: category_status"></div>
                 </td>
                 <td class="text-center">
-                    <div th:replace="fragments :: category_edit('category', '/categories/edit/' + ${cat.id})"></div>
-                    &nbsp;
-                    <div th:replace="fragments :: category_delete('category', ${cat.id}, '/categories/delete/' + ${cat.id})"></div>
+                    <div th:replace="fragments :: category_actions"></div>
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
+
+    <div th:replace="modal_fragments :: confirm_modal"></div>
+
+    <div th:replace="fragments :: footer"></div>
 </div>
+
+<script th:src="@{/js/common_list.js}"></script>
+<script type="text/javascript">
+
+    moduleURL = "[[@{/categories}]]";
+
+    $(document).ready(function () {
+        $(".link-delete").on("click", function (e) {
+            e.preventDefault();
+            showDeleteConfirmationModal($(this), "category");
+        })
+    })
+</script>
 </body>
 </html>

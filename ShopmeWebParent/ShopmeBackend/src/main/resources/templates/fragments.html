@@ -80,42 +80,32 @@
 <!--end footer-->
 
 <!-- STATUS -->
-<div th:fragment="category_status(enabled, entityName, entityURL)" th:remove="tag">
-    <a th:if="${enabled == true}" class="fas fa-check-circle fa-2x icon-green" style="text-decoration: none;"
-       th:href="@{${entityURL} + '/enabled/false'}"
-       th:title="'Disable this ' + ${entityName}"
-    ></a>
+<div th:fragment="category_status" th:remove="tag">
+    <a th:if="${cat.enabled == true}" class="fas fa-check-circle fa-2x icon-green" style="text-decoration: none;"
+       th:href="@{'/categories/' + ${cat.id} +  '/enabled/false'}"
+       title="Disable Category"></a>
 
-    <a th:if="${enabled == false}" class="fas fa-circle fa-2x icon-dark"
-       style="text-decoration: none;"
-       th:href="@{${entityURL} + '/enabled/true'}"
-       th:title="'Enable this ' + ${entityName}"
-    ></a>
+    <a th:if="${cat.enabled == false}" class="fas fa-check-circle fa-2x icon-dark" style="text-decoration: none;"
+       th:href="@{'/categories/' + ${cat.id} +  '/enabled/true'}"
+       title="Enable Category"></a>
 </div>
 
 <!-- STATUS END -->
 
-
 <!--category actions-->
-
-<div th:fragment="category_edit(entityName, editURL)" th:remove="tag">
-    <a style="text-decoration: none;" class="fas fa-edit fa-1x icon-green" th:href="@{${editURL}}"
-       th:title="'Edit this ' + ${entityName}"></a>
-</div>
-
-<!-- EDIT END -->
-
-<!-- DELETE -->
-<div th:fragment="category_delete(entityName, entityId, deleteURL)" th:remove="tag">
-    <th:block> <!--th:if="${visible}"-->
+<div th:fragment="category_actions" th:remove="tag">
+    <a  class="fas fa-edit fa-1x icon-green"
+        th:href="@{'/categories/edit/' + ${cat.id}}"
+        title="Edit Category"></a>
+    &nbsp;
+    <th:block th:if="${cat.hasChildren == false}">
         <a class="fas fa-trash fa-1x icon-dark link-delete"
-           th:href="@{${deleteURL}}"
-           th:entityId="${entityId}"
-           th:title="'Delete this ' + ${entityName}"></a>
+           th:href="@{'/categories/delete/' + ${cat.id}}"
+           th:entityId="${cat.id}"
+           title="Delete Category"></a>
     </th:block>
 </div>
 <!--end category action-->
-
 
 </body>
 </html>

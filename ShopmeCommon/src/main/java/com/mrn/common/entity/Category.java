@@ -29,6 +29,9 @@ public class Category {
     @OneToMany(mappedBy = "parent")
     private Set<Category> children = new HashSet<>();
 
+    @Transient
+    private boolean hasChildren;
+
     public Category() {
     }
 
@@ -49,6 +52,7 @@ public class Category {
         copyCategory.setImage(category.getImage());
         copyCategory.setAlias(category.getAlias());
         copyCategory.setEnabled(category.isEnabled());
+        copyCategory.setHasChildren(category.getChildren().size() > 0);
 
         return copyCategory;
     }
@@ -148,10 +152,21 @@ public class Category {
         this.children = children;
     }
 
+    public boolean isHasChildren() {
+        return hasChildren;
+    }
+
+    public void setHasChildren(boolean hasChildren) {
+        this.hasChildren = hasChildren;
+    }
+
     @Transient
     public String getImagePath() {
         if(id == null) return "/images/image-thumbnail.png";
 
         return "/category-images/" + id +  "/" + image;
     }
+
+
+
 }
