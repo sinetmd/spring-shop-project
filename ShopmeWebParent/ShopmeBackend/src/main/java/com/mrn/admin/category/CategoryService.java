@@ -128,8 +128,23 @@ public class CategoryService {
         Category categoryByName = categoryRepository.findByName(name);
 
         if (isCreatingNew) {
-            if(categoryByName != null)
+            if(categoryByName != null) {
                 return "Duplicated Name";
+            } else {
+                Category categoryByAlias = categoryRepository.findByAlias(alias);
+                if(categoryByAlias != null) {
+                    return "Duplicated Alias";
+                }
+            }
+        } else { // here we are in editing mode (trying to edit a category and we might found that is not unique)
+            if(categoryByName != null && !Objects.equals(categoryByName.getId(), id)) {
+                return "Duplicated Name";
+            }
+
+            Category categoryByAlias = categoryRepository.findByAlias(alias);
+            if(categoryByAlias != null && !Objects.equals(categoryByAlias.getId(), id)) {
+                return "Duplicated Alias";
+            }
         }
         return "OK";
     }

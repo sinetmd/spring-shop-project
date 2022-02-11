@@ -89,10 +89,11 @@ public class UserService {
     public boolean isEmailUnique(Integer id, String email) {
         User userByEmail = userRepository.getUserByEmail(email);
 
-        if (userByEmail == null) return true; // because no user has been created
+        // No user has been created
+        if (userByEmail == null) return true;
 
-        // If is null it means I'm the in create form
-        // otherwise it means I'm in the edit form
+        // If is null it means I'm in create form
+        // otherwise it means I'm in edit form
         boolean isCreatingNew = (id == null);
 
         // This happens when I create a new user

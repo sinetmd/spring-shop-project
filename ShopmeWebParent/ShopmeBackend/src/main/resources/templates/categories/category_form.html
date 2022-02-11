@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments :: page_head(${pageTitle}, 'userForm.js')"></head>
+<head th:replace="fragments :: page_head(${pageTitle}, 'common_form.js')"></head>
 <body>
 <div class="container-fluid">
     <!-- navbar    -->
@@ -17,7 +17,8 @@
     <!-- form -->
     <form th:action="@{/categories/save}" method="post" style="max-width: 500px; margin: 0 auto"
           enctype="multipart/form-data"
-          th:object="${category}">
+          th:object="${category}"
+          onsubmit="return checkUnique(this)">
         <input type="hidden" th:field="*{id}"/>
 
         <div class="border border-secondary rounded p-3">
@@ -102,7 +103,9 @@
 </div>
 
 <script type="text/javascript">
-    moduleURL = "[[@{/users}]]";
+
+    moduleURL = "[[@{/categories}]]";
+    checkCategoryURL = "[[@{/categories/check_unique}]]";
 </script>
 
 </body>
