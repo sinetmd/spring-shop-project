@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<!--head-->
+<head th:fragment="page_head(title, scriptFile)">
+    <meta http-equiv="Cotent-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
+    <title th:text="${title}"></title>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
+    <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" type="text/css"/>
+    <script type="text/javascript" th:src="@{'/js/' + ${scriptFile}}"></script>
+</head>
+<body>
+
+<!--table-->
+<th th:fragment="column_link(fieldName, columnLabel, removeTag)" th:remove="${removeTag}">
+    <a class="text-white"
+       th:href="@{'/users/page/' + ${currentPage} + '?sortField=' + ${fieldName} + '&sortDir=' +
+                ${sortField != fieldName ? sortDir : reverseSortDir} + ${keyword != null ? keyword : ''}}">
+        [[${columnLabel}]]
+    </a>
+
+    <span th:if="${sortField == fieldName}"
+          th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sortdown'}"
+    ></span>
+
+</th>
+
+<!--pagination achor tags -->
+<a th:fragment="page_link(pageNum, label)"
+   class="page-link"
+   th:href="@{'/users/page/' + ${pageNum} + '?sortField=' + ${sortField} + '&sortDir=' +
+                ${sortDir} + ${keyword != null ? keyword : ''}}">
+    [[${label}]]
+</a>
+
+<!--status-->
+<div th:fragment="status(enabled, entityURL)" th:remove="tag">
+    <a th:if="${enabled == true}"
+       class="fas fa-check-circle fa-2x icon-green text-decoration-none"
+       th:href="@{${entityURL} + '/enabled/false'}"
+       title="Disable User">
+    </a>
+
+
+    <a th:if="${enabled == false}" class="fas fa-circle fa-2x icon-dark"
+       style="text-decoration: none;"
+       th:href="@{${entityURL} + '/enabled/true'}"
+       title="Enable User">
+    </a>
+</div>
+<!--end status-->
+
+<!--edit-->
+<div th:fragment="edit(userId)" th:remove='tag'>
+    <a class="fas fa-edit icon-green text-decoration-none"
+       th:href="@{'/users/edit/' + ${userId}}"
+       title="Edit this user"></a>
+</div>
+<!--end status-->
+
+<!--delete-->
+<div th:fragment="delete(userId)" th:remove='tag'>
+    <a class="fas fa-trash-alt icon-dark link-delete text-decoration-none"
+       th:href="@{'/users/delete/' +  ${userId}}"
+       th:userId="${userId}"
+       title="Delete this user">
+    </a>
+</div>
+<!--end delete-->
+
+<!--footer-->
+<div th:fragment="footer" class="text-center m-3">
+    <p>Shopme Control Panel - Copyright &copy; Shopme</p>
+</div>
+<!--end footer-->
+
+<!-- STATUS -->
+<div th:fragment="category_status(enabled, entityName, entityURL)" th:remove="tag">
+    <a th:if="${enabled == true}" class="fas fa-check-circle fa-2x icon-green" style="text-decoration: none;"
+       th:href="@{${entityURL} + '/enabled/false'}"
+       th:title="'Disable this ' + ${entityName}"
+    ></a>
+
+    <a th:if="${enabled == false}" class="fas fa-circle fa-2x icon-dark"
+       style="text-decoration: none;"
+       th:href="@{${entityURL} + '/enabled/true'}"
+       th:title="'Enable this ' + ${entityName}"
+    ></a>
+</div>
+
+<!-- STATUS END -->
+
+
+<!--category actions-->
+
+<div th:fragment="category_edit(entityName, editURL)" th:remove="tag">
+    <a style="text-decoration: none;" class="fas fa-edit fa-1x icon-green" th:href="@{${editURL}}"
+       th:title="'Edit this ' + ${entityName}"></a>
+</div>
+
+<!-- EDIT END -->
+
+<!-- DELETE -->
+<div th:fragment="category_delete(entityName, entityId, deleteURL)" th:remove="tag">
+    <th:block> <!--th:if="${visible}"-->
+        <a class="fas fa-trash fa-1x icon-dark link-delete"
+           th:href="@{${deleteURL}}"
+           th:entityId="${entityId}"
+           th:title="'Delete this ' + ${entityName}"></a>
+    </th:block>
+</div>
+<!--end category action-->
+
+
+</body>
+</html>
