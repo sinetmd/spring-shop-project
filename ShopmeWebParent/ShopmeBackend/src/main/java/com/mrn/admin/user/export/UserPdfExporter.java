@@ -1,10 +1,12 @@
-package com.mrn.admin.export;
+package com.mrn.admin.user.export;
 
-import com.lowagie.text.*;
 import com.lowagie.text.Font;
+import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
+import com.mrn.admin.AbstractExporter;
+import com.mrn.common.entity.Category;
 import com.mrn.common.entity.User;
 
 import javax.servlet.http.HttpServletResponse;
@@ -15,7 +17,7 @@ import java.util.List;
 public class UserPdfExporter extends AbstractExporter {
 
     public void export(List<User> listUsers, HttpServletResponse response) throws IOException {
-        super.setResponseHeader(response, "application/pdf", ".pdf");
+        super.setResponseHeader(response, "application/pdf", ".pdf", "users_");
 
         Document document = new Document(PageSize.A4);
         PdfWriter.getInstance(document, response.getOutputStream());
@@ -27,7 +29,7 @@ public class UserPdfExporter extends AbstractExporter {
         font.setSize(18);
         font.setColor(Color.BLUE);
 
-        Paragraph paragraph = new Paragraph("List of Users", font);
+        Paragraph paragraph = new Paragraph("List of Categories", font);
         paragraph.setAlignment(Paragraph.ALIGN_CENTER);
 
         document.add(paragraph);
@@ -86,6 +88,5 @@ public class UserPdfExporter extends AbstractExporter {
         cell.setPhrase(new Phrase("Enabled", font));
         table.addCell(cell);
     }
-
 
 }

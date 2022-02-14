@@ -42,3 +42,6 @@ function checkPasswordMatch(confirmPassword) {
         confirmPassword.setCustomValidity();
     }
 }
+
+
+

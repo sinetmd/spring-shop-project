@@ -1,5 +1,7 @@
+/****** clear search filter ******/
 function clearFilter() {
-    window.location = moduleURL;
+    document.getElementById("search_keyword").value = "";
+    window.location = resetFilterPage;
 }
 
 function showDeleteConfirmationModal(link, entityName) {

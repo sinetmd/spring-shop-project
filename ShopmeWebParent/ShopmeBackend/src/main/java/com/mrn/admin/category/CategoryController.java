@@ -1,7 +1,12 @@
 package com.mrn.admin.category;
 
 import com.mrn.admin.FileUploadUtil;
+import com.mrn.admin.category.export.CategoryCsvExporter;
+import com.mrn.admin.category.export.CategoryPdfExporter;
+import com.mrn.admin.user.UserService;
 import com.mrn.common.entity.Category;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
@@ -27,24 +33,47 @@ public class CategoryController {
     }
 
     @GetMapping("/categories")
-    public String listAll(@Param("sortDir") String sortDir, Model model) {
+    public String listFirstPage(String sortDir, Model model) {
+        return listByPage(1, sortDir, null,  model);
+    }
+
+    @GetMapping("/categories/page/{pageNum}")
+    public String listByPage(@PathVariable(name = "pageNum") Integer pageNum,
+                             @Param("sortDir") String sortDir,
+                             @Param("keyword") String keyword,
+                             Model model) {
 
         if (sortDir == null || sortDir.isEmpty()) {
             sortDir = "asc";
         }
 
-        String reverseSortDir = reverseSort(sortDir);
+        CategoryPageInfo pageInfo = new CategoryPageInfo();
 
-        List<Category> listCategories = categoryService.listAll(sortDir);
+        List<Category> listCategories = categoryService.listByPage(pageInfo, pageNum, sortDir, keyword);
+
+        long startCount = (long) (pageNum - 1) * CategoryService.ROOT_CATEGORIES_PER_PAGE + 1;
+        long endCount = startCount + CategoryService.ROOT_CATEGORIES_PER_PAGE + 1;
+
+        if (endCount > pageInfo.getTotalElements()) {
+            endCount = pageInfo.getTotalElements();
+        }
+
+        String reverseSortDir = sortDir.equals("asc") ? "desc" : "asc";
 
         model.addAttribute("listCategories", listCategories);
         model.addAttribute("reverseSortDir", reverseSortDir);
-        return "/categories/categories";
-    }
 
-    // reverse sorting
-    private String reverseSort(String sort) {
-        return sort.equals("asc") ? "desc" : "asc";
+        model.addAttribute("totalPages", pageInfo.getTotalPages());
+        model.addAttribute("totalItems", pageInfo.getTotalElements());
+        model.addAttribute("startCount", startCount);
+        model.addAttribute("endCount", endCount);
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("sortField", "name");
+
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("keyword", keyword);
+
+        return "/categories/categories";
     }
 
     @GetMapping("/categories/new")
@@ -139,11 +168,26 @@ public class CategoryController {
 
             redirectAttributes.addFlashAttribute("message", message);
 
-        }catch (CategoryNotFoundException ex) {
+        } catch (CategoryNotFoundException ex) {
             redirectAttributes.addFlashAttribute("message", ex.getMessage());
         }
 
         return "redirect:/categories";
 
     }
+
+    @GetMapping("/categories/export/csv")
+    public void exportToCSV(HttpServletResponse response) throws IOException {
+        List<Category> listCategories = categoryService.listCategoriesUsedInForm();
+        CategoryCsvExporter exporter = new CategoryCsvExporter();
+        exporter.export(listCategories, response);
+    }
+
+    @GetMapping("/categories/export/pdf")
+    public void exportToPDF(HttpServletResponse response) throws IOException {
+        List<Category> listCategories = categoryService.listCategoriesUsedInForm();
+        CategoryPdfExporter exporter = new CategoryPdfExporter();
+        exporter.export(listCategories, response);
+    }
+
 }

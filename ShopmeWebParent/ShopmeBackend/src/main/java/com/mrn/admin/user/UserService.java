@@ -37,7 +37,6 @@ public class UserService {
         return userRepository.getUserByEmail(email);
     }
 
-
     public Page<User> listByPage(int pageNumber, String sortField, String sortDir, String keyword) {
 
         Sort sort = Sort.by(sortField);

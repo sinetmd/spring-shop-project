@@ -1,6 +1,8 @@
 package com.mrn.admin.category;
 
 import com.mrn.common.entity.Category;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -24,4 +26,10 @@ public interface CategoryRepository extends PagingAndSortingRepository<Category,
     void updateEnabledStatus(Integer id, boolean enabled);
 
     Long countById(Integer id);
+
+    @Query("SELECT c FROM Category c WHERE c.parent.id is NULL")
+    Page<Category> findRootCategories(Pageable pageable);
+
+    @Query("SELECT c FROM Category c WHERE c.name LIKE %?1%")
+    Page<Category> search(String keyword, Pageable pageable);
 }

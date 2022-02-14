@@ -43,7 +43,6 @@ public class Category {
         return copyCategory;
     }
 
-
     public static Category copyFull(Category category) {
         Category copyCategory = new Category();
 
