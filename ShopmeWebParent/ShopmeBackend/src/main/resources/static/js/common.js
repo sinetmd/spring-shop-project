@@ -43,5 +43,14 @@ function checkPasswordMatch(confirmPassword) {
     }
 }
 
+/****** display message removed after 4sec ******/
+setTimeout(function () {
+    $('#messageSuccess').remove();
+}, 4000);
+
+
+
+
+
 
 

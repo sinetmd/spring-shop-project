@@ -145,7 +145,8 @@ public class UserController {
     }
 
     @GetMapping("/users/edit/{id}")
-    public String editUser(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes, Model model) {
+    public String editUser(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes,
+                                                        Model model) {
         try {
             User user = userService.get(id);
             List<Role> roles = userService.listRoles();
@@ -164,7 +165,8 @@ public class UserController {
     }
 
     @GetMapping("/users/delete/{id}")
-    public String deleteUser(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes, Model model) {
+    public String deleteUser(@PathVariable(name = "id") Integer id,
+                                RedirectAttributes redirectAttributes) {
         // Because I'm on the users page I don't need to
         try {
             // delete user
