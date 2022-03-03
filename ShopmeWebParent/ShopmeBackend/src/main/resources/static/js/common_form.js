@@ -87,6 +87,31 @@ function checkUnique(form) {
     return false;
 }
 
+function brandCheckUnique(form) {
+    const brandId = $("#id").val();
+    const brandName = $("#name").val();
+
+    const csrfValue = $("input[name='_csrf']").val();
+
+    const categoryURL = brandChekUniqueURL;
+
+    const params = {id: brandId, name: brandName, _csrf: csrfValue};
+
+    $.post(categoryURL, params, function(response) {
+        if(response === "OK") {
+            form.submit();
+        } else if(response === "Duplicate") {
+            showWarningModal("There is another brand having the same name " + "'" + brandName + "'");
+        } else {
+            showErrorModal("Unknown response from server");
+        }
+    }).fail(function() {
+        showErrorModal("Could not connect to the server");
+    });
+
+    return false;
+}
+
 function showModalDialog(title, message) {
     $("#modalTitle").text(title);
     $("#modalBody").text(message);

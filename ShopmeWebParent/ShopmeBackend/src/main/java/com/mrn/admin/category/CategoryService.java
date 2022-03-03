@@ -22,6 +22,7 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
+
     public List<Category> listByPage(CategoryPageInfo pageInfo, int pageNum, String sortDir, String keyword) {
 
         Sort sort = Sort.by("name");
@@ -168,12 +169,12 @@ public class CategoryService {
                 }
             }
         } else {
-            if (categoryByName != null && categoryByName.getId() != id) {
+            if (categoryByName != null && !Objects.equals(categoryByName.getId(), id)) {
                 return "DuplicateName";
             }
 
             Category categoryByAlias = categoryRepository.findByAlias(alias);
-            if (categoryByAlias != null && categoryByAlias.getId() != id) {
+            if (categoryByAlias != null && !Objects.equals(categoryByAlias.getId(), id)) {
                 return "DuplicateAlias";
             }
 
