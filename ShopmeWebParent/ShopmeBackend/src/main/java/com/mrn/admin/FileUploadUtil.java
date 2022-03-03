@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+
 /*
 * Class that saves image to your specified location.
 * If there is no upload directory then will be created one.

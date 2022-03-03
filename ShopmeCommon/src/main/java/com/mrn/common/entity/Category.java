@@ -166,6 +166,8 @@ public class Category {
         return "/category-images/" + id +  "/" + image;
     }
 
-
-
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

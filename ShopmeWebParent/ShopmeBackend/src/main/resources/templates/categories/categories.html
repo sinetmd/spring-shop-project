@@ -22,13 +22,17 @@
     <!-- search form  -->
     <div th:replace="fragments :: search_form('/categories/page/1')"></div>
 
+    <div id="messageSuccess" th:if="${message != null}" class="alert alert-success text-center">
+        [[${message}]]
+    </div>
+
     <div class="full-details">
         <table class="table table-bordered table-striped table-hover table-responsive-xl">
             <thead class="thead-dark">
             <tr>
                 <th>ID</th>
                 <th>Category Image</th>
-                <th th:replace="fragments :: column_link('categories', 'Name', 'Category Name', 'none')"></th>
+                <th th:replace="fragments :: column_link('/categories', 'Name', 'Category Name', 'none')"></th>
                 <th>Alias</th>
                 <th>
                     Enabled
